@@ -9,6 +9,7 @@ import errorMiddleware from './middleware/error.middleware.js';
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // to get query params
 
 app.use(
   cors({

@@ -38,7 +38,7 @@ To run this project, you will need to add the following environment variables to
 1. Setup Instruction
 
 ```
-git clone https://github.com/sum1t-here/LMS.git
+git clone https://github.com/sum1t-here/learning-management-system-backend.git
 ```
 
 2. Move into the directory
@@ -50,7 +50,7 @@ cd server
 3. Install dependencies
 
 ```
-npm i bcryptjs cloudinary cookie-parser cors dotenv express jsonwebtoken mongoose multer nodemailer nodemon
+npm i
 ```
 
 4. Run the server
