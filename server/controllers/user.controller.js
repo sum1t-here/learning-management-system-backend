@@ -4,7 +4,6 @@ import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import crypto from 'crypto';
 import sendEmail from '../utils/sendEmail.utils.js';
-import { error } from 'console';
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60,
@@ -166,14 +165,26 @@ const logout = (req, res, next) => {
  * @ACCESS Private(Logged in users only)
  */
 const getProfile = async (req, res, next) => {
-  // Finding the user using the id from modified req object
-  const user = await User.findById(req.user.id);
+  try {
+    // Check if req.user exists and has an id property
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not authenticated',
+      });
+    }
 
-  res.status(200).json({
-    success: true,
-    message: 'User details',
-    user,
-  });
+    // Finding the user using the id from modified req object
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      message: 'User details',
+      user,
+    });
+  } catch (error) {
+    return next(new AppError(error));
+  }
 };
 
 /**

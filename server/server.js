@@ -5,8 +5,8 @@ import cloudinary from 'cloudinary';
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
-  console.log(`App started at http://localhost:${PORT}`);
   await connectionToDb();
+  console.log(`App started at http://localhost:${PORT}`);
 });
 
 // cloudinary configuration
