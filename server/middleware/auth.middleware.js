@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import AppError from '../utils/error.utils.js';
-import moment from 'moment';
 
 const isLoggedIn = async (req, res, next) => {
   try {
@@ -12,8 +11,6 @@ const isLoggedIn = async (req, res, next) => {
       return next(new AppError('Unauthorized, please login to continue', 401));
     }
 
-    const expiryDuration = process.env.JWT_EXPIRY;
-    const expiryTime = moment().add(parseInt(expiryDuration), 'hours');
     // Decoding the token using jwt package verify method
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
