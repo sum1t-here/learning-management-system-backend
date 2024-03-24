@@ -23,10 +23,6 @@ app.use(cookieParser());
 // user routes
 app.use('/api/v1/user', userRoutes);
 
-app.use('/', (req, res) => {
-  res.status(200).send('Welcome to the Learning Management System backend!');
-});
-
 app.all('*', (req, res) => {
   res.status(200).json({
     error: 'Not Found',

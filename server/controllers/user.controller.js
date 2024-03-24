@@ -205,11 +205,12 @@ const forgotPassword = async (req, res, next) => {
     return next(new AppError('Email not registered', 404));
   }
 
-  const resetToken = await User.generatePasswordResetToken();
+  const resetToken = await user.generatePasswordResetToken();
 
-  await User.save();
+  await user.save();
 
   const resetPasswordURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+  // console.log(resetPasswordURL);
 
   const subject = 'Reset Password';
   const message = `You can reset your password by clicking <a href=${resetPasswordURL} target="_blank">Reset your password</a>\nIf the above link does not work for some reason then copy paste this link in new tab ${resetPasswordURL}.\n If you have not requested this, kindly ignore.`;
@@ -231,7 +232,7 @@ const forgotPassword = async (req, res, next) => {
 };
 
 /**
- * @FORGOT_PASSWORD
+ * @RESET_PASSWORD
  * @ROUTE @POST {{URL}}/api/v1/user/reset/:resetToken
  * @ACCESS Public
  */
@@ -247,6 +248,10 @@ const resetPassword = async (req, res, next) => {
   // Check if password is not there then send response saying password is required
   if (!password) {
     return next(new AppError('Password is required', 400));
+  }
+
+  if (password.length < 8) {
+    return next(new AppError('Password must have more then 8 characters', 400));
   }
 
   console.log(forgotPasswordToken);
@@ -331,13 +336,13 @@ const changePassword = async (req, res, next) => {
 
 /**
  * @UPDATE_USER
- * @ROUTE @POST {{URL}}/api/v1/user/update/:id
+ * @ROUTE @POST {{URL}}/api/v1/user/update
  * @ACCESS Private (Logged in user only)
  */
 const updateUser = async (req, res, next) => {
   // Destructuring the necessary data from the req object
-  const { fullName } = req.body;
-  const { id } = req.params; // req.user.id (from token)
+  const { fullname } = req.body;
+  const id = req.user.id; // from token
 
   const user = await User.findById(id);
 
@@ -345,8 +350,8 @@ const updateUser = async (req, res, next) => {
     return next(new AppError('Invalid user or user doesnot exist', 400));
   }
 
-  if (fullName) {
-    user.fullName = fullName;
+  if (fullname) {
+    user.fullname = fullname;
   }
   // Run only if user sends a file
   if (req.file) {

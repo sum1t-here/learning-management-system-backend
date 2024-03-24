@@ -76,7 +76,7 @@ userSchema.methods = {
   comparePassword: async function (plainPassword) {
     return await bcrypt.compare(plainPassword, this.password);
   },
-
+  // This will generate a token for password reset
   generatePasswordResetToken: async function () {
     const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -85,6 +85,8 @@ userSchema.methods = {
       .update(resetToken)
       .digest('hex');
     this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000; // 15 min from now
+
+    return resetToken;
   },
 };
 
