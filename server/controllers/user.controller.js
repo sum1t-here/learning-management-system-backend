@@ -4,6 +4,7 @@ import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import crypto from 'crypto';
 import sendEmail from '../utils/sendEmail.utils.js';
+import { error } from 'console';
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60,
@@ -81,13 +82,6 @@ const register = async (req, res, next) => {
   // Save the user object
   await user.save();
 
-  // If all good send the response to the frontend
-  res.status(201).json({
-    success: true,
-    message: 'User registered successfully',
-    user,
-  });
-
   const token = await user.generateJWTToken();
 
   // Setting the password to undefined so it does not get sent in the response
@@ -95,6 +89,13 @@ const register = async (req, res, next) => {
 
   // Setting the token in the cookie with name token along with cookieOptions
   res.cookie('token', token, cookieOptions);
+
+  // If all good send the response to the frontend
+  res.status(201).json({
+    success: true,
+    message: 'User registered successfully',
+    user,
+  });
 };
 
 /**
@@ -382,4 +383,5 @@ export {
   forgotPassword,
   resetPassword,
   changePassword,
+  updateUser,
 };

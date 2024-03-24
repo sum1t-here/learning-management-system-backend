@@ -20,19 +20,19 @@ app.use(
 
 app.use(cookieParser());
 
+// user routes
+app.use('/api/v1/user', userRoutes);
+
 app.use('/', (req, res) => {
   res.status(200).send('Welcome to the Learning Management System backend!');
 });
 
-app.all('/*', (req, res) => {
+app.all('*', (req, res) => {
   res.status(200).json({
     error: 'Not Found',
     message: 'The requested resource does not exist.',
   });
 });
-
-// user routes
-app.use('api/v1/user', userRoutes);
 
 app.use(errorMiddleware);
 
