@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
 import userRoutes from './routes/user.routes.js';
+import courseRoutes from './routes/course.routes.js';
 config();
 import errorMiddleware from './middleware/error.middleware.js';
 
@@ -22,6 +23,8 @@ app.use(cookieParser());
 
 // user routes
 app.use('/api/v1/user', userRoutes);
+// course routes
+app.use('api/v1/courses', courseRoutes);
 
 app.all('*', (req, res) => {
   res.status(200).json({
